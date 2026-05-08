@@ -1,0 +1,6 @@
+tests/
+.github/
+.vscode/
+*.log
+.DS_Store
+仕様書.md

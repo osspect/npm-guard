@@ -1,0 +1,46 @@
+{
+  "name": "@osspect/npmguard",
+  "version": "0.3.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "Local npm registry proxy that blocks malicious packages before installation (similar in concept to Takumi Guard).",
+  "type": "module",
+  "main": "src/index.js",
+  "bin": {
+    "npm-guard": "./bin/npm-guard.js"
+  },
+  "files": [
+    "bin",
+    "src",
+    "README.md",
+    "SPEC.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18.17"
+  },
+  "scripts": {
+    "start": "node bin/npm-guard.js start",
+    "scan": "node bin/npm-guard.js scan",
+    "test": "node --test tests/*.test.js"
+  },
+  "keywords": [
+    "npm",
+    "registry",
+    "proxy",
+    "security",
+    "supply-chain",
+    "malware",
+    "typosquat",
+    "postinstall"
+  ],
+  "author": "ktoshi",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^12.1.0",
+    "kleur": "^4.1.5",
+    "lru-cache": "^11.0.2",
+    "semver": "^7.6.3"
+  }
+}
