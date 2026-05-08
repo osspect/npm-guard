@@ -1,6 +1,6 @@
 # @osspect/npmguard
 
-`npm install` のサプライチェーン攻撃を **多層防御** で止めるツールセット。**レジストリプロキシ** に加え、safenpm 相当の **OS サンドボックス + 静的解析 + ロックファイル監査 + レピュテーション + 動作差分 + 分散脅威インテリジェンス** を備えます。
+`npm install` のサプライチェーン攻撃を **多層防御** で止めるツールセット。**レジストリプロキシ** に加え、**OS サンドボックス + 静的解析 + ロックファイル監査 + レピュテーション + 動作差分 + 分散脅威インテリジェンス** を備えます。
 
 > パッケージ名: `@osspect/npmguard` ／ CLI 名: `npm-guard`
 > 対応: macOS (sandbox-exec) / Linux (firejail) / Windows（best-effort）／ Node 18.17+
