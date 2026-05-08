@@ -1,14 +1,16 @@
+import path from "node:path";
 import { runNpmInstall } from "../installer/npmInstall.js";
 import { discoverPackages } from "../installer/plan.js";
 import { runHooksSandboxed } from "../installer/runScripts.js";
 import { loadAllowEntries } from "../store/rcfile.js";
 import { scanPackage } from "../analyzer/index.js";
 import { hashScript } from "../analyzer/behavior.js";
-import { auditLockfile } from "../analyzer/lockfile.js";
+import { auditLockfile, listLockedDependencies } from "../analyzer/lockfile.js";
 import { reputationOf, aggregateReputation } from "../analyzer/reputation.js";
 import { diffAgainstSnapshot } from "../analyzer/behavior.js";
 import { listAllow, addAllow } from "../store/allowlist.js";
 import { appendAudit } from "../store/audit.js";
+import { recordDependencyKeys } from "../store/watchRegistry.js";
 import { reportSignal, checkIntel } from "../intel/client.js";
 import { log } from "../util/log.js";
 import kleur from "kleur";
@@ -175,6 +177,22 @@ export async function installCommand({
     intelFlagged: intelHits.length,
   };
   await appendAudit({ command: "install", backend, packages, summary });
+
+  try {
+    const locked = await listLockedDependencies(cwd);
+    const label = path.basename(cwd);
+    if (locked?.length) await recordDependencyKeys(cwd, locked, { label });
+    else {
+      const uniq = new Map();
+      for (const p of pkgs) {
+        if (!p.name || !p.version) continue;
+        uniq.set(`${p.name}@${p.version}`, { name: p.name, version: p.version });
+      }
+      await recordDependencyKeys(cwd, [...uniq.values()], { label });
+    }
+  } catch (e) {
+    log.debug("watch registry:", e?.message);
+  }
 
   // Report signals for sandbox violations
   for (const r of results.filter((x) => x.status === "violation")) {

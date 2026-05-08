@@ -147,3 +147,55 @@ export async function auditLockfile(cwd = process.cwd()) {
 
   return { score, issues, totalPackages: entries.length };
 }
+
+/**
+ * Enumerate registry tarball deps from package-lock.json (lockfile v2+).
+ * Returns deduped { name, version }[] or null if no lockfile / unreadable.
+ */
+export async function listLockedDependencies(cwd = process.cwd()) {
+  const lockPath = path.join(cwd, "package-lock.json");
+  let raw;
+  try {
+    raw = await fs.readFile(lockPath, "utf8");
+  } catch (e) {
+    if (e.code === "ENOENT") return null;
+    throw e;
+  }
+
+  let lock;
+  try {
+    lock = JSON.parse(raw);
+  } catch {
+    return null;
+  }
+
+  const packages = lock.packages || {};
+  const map = new Map();
+
+  for (const [pkgPath, info] of Object.entries(packages)) {
+    if (!pkgPath || pkgPath === "") continue;
+    if (!pkgPath.includes("node_modules")) continue;
+    if (!info || typeof info !== "object") continue;
+
+    const version = info.version;
+    if (!version || typeof version !== "string") continue;
+
+    const name =
+      typeof info.name === "string" && info.name.length > 0
+        ? info.name
+        : pkgPathToPackageName(pkgPath);
+    if (!name) continue;
+
+    map.set(`${name}@${version}`, { name, version });
+  }
+
+  return [...map.values()];
+}
+
+function pkgPathToPackageName(pkgPath) {
+  const needle = "node_modules/";
+  const idx = pkgPath.lastIndexOf(needle);
+  const tail = idx >= 0 ? pkgPath.slice(idx + needle.length) : pkgPath;
+  const normalized = tail.replace(/\\/g, "/");
+  return normalized || null;
+}

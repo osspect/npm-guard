@@ -3,7 +3,12 @@ import { fetchWithTimeout } from "../util/fetch.js";
 import { log } from "../util/log.js";
 import { readUserConfig, writeUserConfig } from "../config.js";
 
-const DEFAULT_BASE = process.env.NPM_GUARD_INTEL_URL || "";
+// Canonical community endpoint operated by @osspect.
+// Override per machine with `npm-guard intel set <url>` or `NPM_GUARD_INTEL_URL`.
+// Disable with `npm-guard intel disable` or `NPM_GUARD_NO_REPORT=1`.
+export const DEFAULT_INTEL_URL = "https://intel.npmguard.dev";
+
+const DEFAULT_BASE = process.env.NPM_GUARD_INTEL_URL || DEFAULT_INTEL_URL;
 
 function dailySalt() {
   const day = new Date().toISOString().slice(0, 10);
@@ -14,11 +19,24 @@ export function reporterId() {
   return crypto.createHash("sha256").update(dailySalt()).digest("hex").slice(0, 32);
 }
 
-export async function intelEnabled() {
+/** True when anonymous signal reporting to the intel server is allowed. */
+export async function intelReportingEnabled() {
   if (process.env.NPM_GUARD_NO_REPORT === "1") return false;
   const cfg = await readUserConfig();
   if (cfg.intelReporting === false) return false;
-  return Boolean(cfg.intelBaseUrl || DEFAULT_BASE);
+  return await intelQueriesEnabled();
+}
+
+/** True when GET /v1/check queries are allowed (independent of reporting). */
+export async function intelQueriesEnabled() {
+  if (process.env.NPM_GUARD_NO_INTEL === "1") return false;
+  const cfg = await readUserConfig();
+  return Boolean(process.env.NPM_GUARD_INTEL_URL || cfg.intelBaseUrl || DEFAULT_BASE);
+}
+
+/** @deprecated use intelReportingEnabled */
+export async function intelEnabled() {
+  return intelReportingEnabled();
 }
 
 async function baseUrl() {
@@ -34,7 +52,7 @@ export async function configureIntel({ baseUrl: url, reporting } = {}) {
 }
 
 export async function checkIntel(name, version) {
-  if (!(await intelEnabled())) return null;
+  if (!(await intelQueriesEnabled())) return null;
   const url = `${await baseUrl()}/v1/check?name=${encodeURIComponent(name)}&version=${encodeURIComponent(version || "")}`;
   try {
     const res = await fetchWithTimeout(url, {}, 4000);
@@ -47,7 +65,7 @@ export async function checkIntel(name, version) {
 }
 
 export async function reportSignal({ name, version, scriptHash, category, severity }) {
-  if (!(await intelEnabled())) return;
+  if (!(await intelReportingEnabled())) return;
   try {
     await fetchWithTimeout(
       `${await baseUrl()}/v1/signal`,

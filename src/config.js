@@ -8,6 +8,7 @@ export const DATA_DIR = process.env.NPM_GUARD_HOME || path.join(HOME, ".npm-guar
 export const ALLOWLIST_FILE = path.join(DATA_DIR, "allowlist.json");
 export const EVENTS_LOG = path.join(DATA_DIR, "events.log");
 export const CONFIG_FILE = path.join(DATA_DIR, "config.json");
+export const WATCH_REGISTRY_FILE = path.join(DATA_DIR, "watch-registry.json");
 
 export const UPSTREAM = process.env.NPM_GUARD_UPSTREAM || "https://registry.npmjs.org";
 export const DOWNLOADS_API = "https://api.npmjs.org/downloads";

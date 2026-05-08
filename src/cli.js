@@ -18,8 +18,17 @@ import { doctorCommand } from "./commands/doctor.js";
 import { fixCommand } from "./commands/fix.js";
 import { diffCommand } from "./commands/diff.js";
 import { auditCommand } from "./commands/audit.js";
-import { configureIntel } from "./intel/client.js";
+import { configureIntel, DEFAULT_INTEL_URL, intelQueriesEnabled, intelReportingEnabled } from "./intel/client.js";
+import { readUserConfig } from "./config.js";
 import { updateCommand, blocklistInfoCommand } from "./commands/update.js";
+import {
+  watchSyncCommand,
+  watchCheckCommand,
+  watchListCommand,
+  watchProjectsCommand,
+} from "./commands/watch.js";
+
+const DEFAULT_WATCH_CONCURRENCY = "5";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const pkgJsonPath = path.resolve(__dirname, "..", "package.json");
@@ -190,6 +199,59 @@ program
     await blocklistInfoCommand({ json: opts.json });
   });
 
+// === Continuous dependency watch ===
+const watchCmd = program
+  .command("watch")
+  .description("Continuous monitoring: alert when installed deps worsen vs baseline");
+
+watchCmd
+  .command("sync")
+  .description("Register dependencies from package-lock.json for ongoing monitoring")
+  .option("-C, --cwd <dir>", "project directory")
+  .option("--json", "machine-readable JSON output")
+  .option("-l, --label <name>", "label for notifications")
+  .action(async (opts) => {
+    const cwd = opts.cwd ? path.resolve(opts.cwd) : process.cwd();
+    const r = await watchSyncCommand({ cwd, json: opts.json, label: opts.label });
+    process.exit(r.code);
+  });
+
+watchCmd
+  .command("check")
+  .description("Re-scan watched packages; notify on risk increase (intel / blocklist / score)")
+  .option("-C, --cwd <dir>", "project directory")
+  .option("--all-projects", "check every registered project directory")
+  .option("--json", "machine-readable JSON output")
+  .option("-j, --concurrency <n>", "parallel scans", DEFAULT_WATCH_CONCURRENCY)
+  .action(async (opts) => {
+    const cwd = opts.cwd ? path.resolve(opts.cwd) : process.cwd();
+    const r = await watchCheckCommand({
+      cwd,
+      allProjects: !!opts.allProjects,
+      json: opts.json,
+      concurrency: Number(opts.concurrency) || 5,
+    });
+    process.exit(r.code);
+  });
+
+watchCmd
+  .command("list")
+  .description("List packages registered for watch in this project")
+  .option("-C, --cwd <dir>", "project directory")
+  .option("--json", "machine-readable JSON output")
+  .action(async (opts) => {
+    const cwd = opts.cwd ? path.resolve(opts.cwd) : process.cwd();
+    await watchListCommand({ cwd, json: opts.json });
+  });
+
+watchCmd
+  .command("projects")
+  .description("List all projects that have watch registry entries")
+  .option("--json", "machine-readable JSON output")
+  .action(async (opts) => {
+    await watchProjectsCommand({ json: opts.json });
+  });
+
 // === Threat intel configuration ===
 const intel = program.command("intel").description("Configure the decentralized threat intel network");
 intel.command("set <url>")
@@ -209,6 +271,24 @@ intel.command("enable")
   .action(async () => {
     await configureIntel({ reporting: true });
     log.ok("intel reporting enabled");
+  });
+intel.command("show")
+  .description("Show current intel configuration")
+  .action(async () => {
+    const cfg = await readUserConfig();
+    const env = process.env.NPM_GUARD_INTEL_URL;
+    const effective = env || cfg.intelBaseUrl || DEFAULT_INTEL_URL;
+    const queries = await intelQueriesEnabled();
+    const reporting = await intelReportingEnabled();
+    console.log(JSON.stringify({
+      effectiveUrl: effective,
+      source: env ? "env:NPM_GUARD_INTEL_URL"
+        : cfg.intelBaseUrl ? "config:~/.npm-guard/config.json"
+        : "default",
+      queriesEnabled: queries,
+      reportingEnabled: reporting,
+      defaultUrl: DEFAULT_INTEL_URL,
+    }, null, 2));
   });
 
 program.parseAsync(process.argv).catch((e) => {
