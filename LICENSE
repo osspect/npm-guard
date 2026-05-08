@@ -1,21 +1,107 @@
-MIT License
+@osspect/npmguard — Use-Only License
+Copyright (c) 2026 ktoshi. All rights reserved.
 
-Copyright (c) 2026 ktoshi
+================================================================
+English
+================================================================
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+1. GRANT OF USE
+   Subject to the terms below, you are granted a non-exclusive,
+   non-transferable, royalty-free, revocable license to install and
+   use the Software (in unmodified form) on systems you control,
+   for the sole purpose of running it as intended.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+2. RESTRICTIONS
+   Except as expressly permitted in Section 1, you MUST NOT:
+   (a) copy, redistribute, sublicense, sell, lease, rent, or
+       otherwise transfer the Software or any part of it to any
+       third party, in source or binary form;
+   (b) modify, adapt, translate, fork, or create derivative works
+       based on the Software;
+   (c) reverse engineer, decompile, or disassemble the Software,
+       except to the extent such activity is expressly permitted by
+       applicable law that cannot be contractually waived;
+   (d) remove, alter, or obscure any copyright, trademark, or
+       other proprietary notice;
+   (e) host, publish, or otherwise make the Software available to
+       third parties as a service (SaaS, ASP, hosted, or similar);
+   (f) use the Software to develop a competing product;
+   (g) use the Software in violation of any applicable law.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+3. NO OTHER RIGHTS
+   No rights are granted by implication, estoppel, or otherwise.
+   All rights not expressly granted herein are reserved by the
+   copyright holder.
+
+4. THIRD-PARTY COMPONENTS
+   The Software may include or depend on third-party open-source
+   components governed by their own licenses; nothing in this
+   license restricts your rights under those licenses with respect
+   to those components.
+
+5. TERMINATION
+   This license terminates automatically upon any breach. Upon
+   termination you must immediately stop using the Software and
+   destroy all copies in your possession.
+
+6. NO WARRANTY
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+   OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND
+   NON-INFRINGEMENT.
+
+7. LIMITATION OF LIABILITY
+   TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT
+   SHALL THE COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES, OR
+   OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR
+   OTHERWISE, ARISING FROM, OUT OF, OR IN CONNECTION WITH THE
+   SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+================================================================
+日本語(参考訳)
+================================================================
+
+1. 使用許諾
+   本ライセンスの条件に従うことを条件として、本ソフトウェアを
+   未改変のまま、使用者が管理するシステム上にインストールし、
+   本来の目的のために実行する非独占・譲渡不能・無償・撤回可能な
+   権利を許諾します。
+
+2. 禁止事項
+   第1条に明示的に許可された範囲を除き、以下を行ってはなりません。
+   (a) 本ソフトウェアまたはその一部を、ソース・バイナリを問わず、
+       第三者に対して複製・再配布・サブライセンス・販売・賃貸
+       またはその他の方法で譲渡すること。
+   (b) 本ソフトウェアを改変・翻案・翻訳・フォーク・派生物の作成。
+   (c) リバースエンジニアリング、逆コンパイル、逆アセンブル
+       (適用法令により契約で放棄できない範囲を除く)。
+   (d) 著作権・商標その他の権利表示の削除・改変・隠蔽。
+   (e) 本ソフトウェアをサービス (SaaS / ASP / ホスティング等)
+       として第三者に提供すること。
+   (f) 競合製品の開発のための利用。
+   (g) 適用法令に違反する利用。
+
+3. 黙示の権利の不付与
+   黙示・禁反言その他の法理により、いかなる権利も付与されません。
+   本ライセンスに明示的に付与されていない一切の権利は、著作権者
+   に留保されます。
+
+4. 第三者コンポーネント
+   本ソフトウェアに含まれる、または依存する第三者のオープンソース
+   コンポーネントは、それぞれのライセンスに従うものとし、本ライ
+   センスはそれらの利用者の権利を制限するものではありません。
+
+5. ライセンスの終了
+   本ライセンス違反があった場合、本ライセンスは自動的に終了します。
+   終了時には直ちに本ソフトウェアの使用を停止し、保有するすべての
+   複製物を破棄しなければなりません。
+
+6. 無保証
+   本ソフトウェアは現状有姿で提供され、商品性、特定目的への適合性、
+   非侵害性を含む明示・黙示のいかなる保証も伴いません。
+
+7. 責任の制限
+   適用法令で許される最大限の範囲において、著作権者は、契約・
+   不法行為その他いかなる原因に基づくものであっても、本ソフトウェア
+   またはその利用に起因または関連して生じた一切の請求・損害・
+   その他の責任を負わないものとします。

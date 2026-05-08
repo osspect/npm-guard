@@ -270,4 +270,13 @@ npm-guard intel disable        # 送信停止（クエリは継続）
 
 ## ライセンス
 
-MIT
+**Use-Only License**（使用のみ許可）。詳細は [LICENSE](./LICENSE) を参照してください。
+
+要点（参考）:
+
+- ✅ 自分の管理下のシステムへの **インストール・実行** は OK
+- ❌ 改変・派生物の作成 / 再配布・販売・サブライセンス
+- ❌ SaaS など第三者へのサービス提供
+- ❌ 競合製品の開発のための利用
+- ❌ リバースエンジニアリング（法令で許容される場合を除く）
+- 第三者 OSS 依存（commander / kleur / lru-cache / semver / Shai-Hulud feed 等）はそれぞれのライセンスに従います
